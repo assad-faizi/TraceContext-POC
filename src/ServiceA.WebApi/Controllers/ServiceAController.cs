@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Client.WebApi.Controllers
+namespace ServiceA.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrdersController : ControllerBase
+    public class ServiceAController : ControllerBase
     {
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok();
+            return Ok("Hello from Service A");
         }
     }
 }

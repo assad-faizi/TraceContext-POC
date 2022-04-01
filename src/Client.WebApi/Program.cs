@@ -24,6 +24,10 @@ builder.Services.AddOpenTelemetryTracing(builder =>
             opts.ExportProcessorType = ExportProcessorType.Simple;
         });
 });
+builder.Services.AddHttpClient("ServiceAHttpClient", x =>
+{
+    x.BaseAddress = new Uri(config.GetValue<string>("ServiceA:Uri"));
+});
 
 var app = builder.Build();
 

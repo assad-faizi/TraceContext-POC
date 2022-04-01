@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  client.webapi:
+  clientwebapi:
     image: ${DOCKER_REGISTRY-}clientwebapi
     container_name: client-webapi
     build:
@@ -10,11 +10,29 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ServiceA__Uri=http://serviceawebapi
       - Jaeger__AgentHost=jaeger
       - Jaeger__AgentPort=6831
     ports:
-      - 5000:80
-      - 5443:443
+      - 50000:80
+      - 50443:443
+    depends_on:
+      - jaeger
+      - serviceawebapi
+    networks:
+      - tracecontext
+
+  serviceawebapi:
+    image: ${DOCKER_REGISTRY-}serviceawebapi
+    container_name: servicea-webapi
+    build:
+      context: .
+      dockerfile: ServiceA.WebApi/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - Jaeger__AgentHost=jaeger
+      - Jaeger__AgentPort=6831
     depends_on:
       - jaeger
     networks:
