@@ -7,21 +7,32 @@ namespace Client.WebApi.Controllers
     public class ClientController : ControllerBase
     {
         private readonly HttpClient _httpClient;
+        private readonly ILogger<ClientController> _logger;
 
-        public ClientController(IHttpClientFactory httpClientFactory)
+        public ClientController(IHttpClientFactory httpClientFactory, ILogger<ClientController> logger)
         {
             _httpClient = httpClientFactory.CreateClient("ServiceAHttpClient");
+            _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var response = await _httpClient.GetAsync("api/ServiceA");
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                var response = await _httpClient.GetAsync("api/ServiceA");
+                response.EnsureSuccessStatusCode();
 
-            var request = await response.Content.ReadAsStringAsync();
+                var request = await response.Content.ReadAsStringAsync();
 
-            return Ok(request);
+                return Ok(request);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "[Custom Log]::OMG!!! Seems like Service A is broken.");
+                throw;
+            }
+           
         }
     }
 }

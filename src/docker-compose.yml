@@ -11,8 +11,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ServiceA__Uri=http://serviceawebapi
-      - Jaeger__AgentHost=jaeger
-      - Jaeger__AgentPort=6831
+      - Jaeger__Endpoint=http://jaeger:14268/api/traces
     ports:
       - 50000:80
       - 50443:443
@@ -31,8 +30,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
-      - Jaeger__AgentHost=jaeger
-      - Jaeger__AgentPort=6831
+      - Jaeger__Endpoint=http://jaeger:14268/api/traces
     depends_on:
       - jaeger
     networks:
